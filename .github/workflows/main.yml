@@ -1,0 +1,25 @@
+name: Windows Build Test
+on: [push, pull_request]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: haskell-actions/setup@v2
+      with:
+        enable-stack: true
+        
+    - name: Setup SDL2
+      run: |
+        Invoke-WebRequest https://www.libsdl.org/release/SDL2-devel-2.28.5-VC.zip -OutFile SDL2.zip
+        Invoke-WebRequest https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.8.0-VC.zip -OutFile SDL2_image.zip
+        Expand-Archive SDL2.zip -DestinationPath .
+        Expand-Archive SDL2_image.zip -DestinationPath .
+    
+    - name: Build with pkgconfig flag disabled
+      run: |
+        stack build --flag sdl2-image:-pkgconfig `
+          --extra-include-dirs="SDL2-2.28.5/include;SDL2_image-2.8.0/include" `
+          --extra-lib-dirs="SDL2-2.28.5/lib/x64;SDL2_image-2.8.0/lib/x64"
