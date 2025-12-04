@@ -30,7 +30,7 @@ jobs:
     - name: Install dependencies and build
       run: |
         cabal update
-        cabal configure --flags="-pkgconfig" `
+        cabal configure --flags="sdl2:-pkgconfig -pkgconfig" `
           --extra-include-dirs="${{ github.workspace }}/SDL2-2.28.5/include" `
           --extra-include-dirs="${{ github.workspace }}/SDL2_image-2.8.0/include" `
           --extra-lib-dirs="${{ github.workspace }}/SDL2-2.28.5/lib/x64" `
