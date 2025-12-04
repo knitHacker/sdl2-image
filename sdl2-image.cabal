@@ -15,6 +15,15 @@ source-repository head
   type:     git
   location: https://github.com/sbidin/sdl2-image.git
 
+flag pkgconfig
+  description: Use pkg-config to find SDL2 and SDL2_image
+  default:     True
+  manual:      True
+
+flag example
+  description: Build the example executable
+  default:     False
+
 library
   ghc-options: -Wall
 
@@ -28,10 +37,6 @@ library
   hs-source-dirs:
     src
 
-  pkgconfig-depends:
-    sdl2 >= 2.0.3,
-    SDL2_image >= 2.0.0
-
   build-depends:
     base             >= 4.7 && < 5,
     bytestring       >= 0.10.4.0,
@@ -42,12 +47,15 @@ library
   default-language:
     Haskell2010
 
+  if flag(pkgconfig)
+    pkgconfig-depends:
+      sdl2 >= 2.0.3,
+      SDL2_image >= 2.0.0
+  else
+    extra-libraries: SDL2_image
+
   if os(windows)
     cpp-options: -D_SDL_main_h -DSDL_main_h_ -DSDL_MAIN_HANDLED
-
-flag example
-  description: Build the example executable
-  default:     False
 
 executable sdl2-image-example
   ghc-options: -Wall
