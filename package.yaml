@@ -22,6 +22,12 @@ extra-source-files:
 synopsis:            Haskell bindings to SDL2_image
 category:            Graphics, Foreign, Image
 
+flags:
+  pkgconfig:
+    description: Use pkgconfig to find SDL2_image
+    default: true
+    manual: true
+
 dependencies:
 - base >= 4.9 && < 5
 - sdl2 >= 2.0.0
@@ -36,12 +42,15 @@ library:
     autogen-modules:
       Paths_sdl2_image
 
-pkg-config-dependencies:
-- sdl2 >= 2.0.3
-- SDL2_image >= 1.0.1
-
-extra-libraries:
-- SDL2_image
+when:
+- condition: flag(pkgconfig)
+  then:
+    pkg-config-dependencies:
+    - sdl2 >= 2.0.3
+    - SDL2_image >= 1.0.1
+  else:
+    extra-libraries:
+    - SDL2_image
 
 executables:
   sdl2-image-example:
