@@ -73,6 +73,7 @@ module SDL.Raw.Image
   , quit
   ) where
 
+#define SDL_MAIN_HANDLED
 #include "SDL_image.h"
 
 import Data.Kind              (Type)
